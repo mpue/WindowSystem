@@ -12,25 +12,15 @@ namespace WindowSystem
 {
     public class View3D : Control
     {
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
-        private readonly Vector2 size;
-
-
-
         private Color borderColor = Color.DarkGray;
         private Color textColor = Color.Black;
         private Color selectionBorderColor = Color.Orange;
         private Color backgroundColor = Color.White;
 
-
-
-        public View3D(ContentManager content, SpriteBatch spriteBatch, Vector2 position, String text)
+        public View3D(Vector2 position, String text) : base()
         {
-            this.content = content;
-            this.spriteBatch = spriteBatch;
             this.Position = position;
-            Bounds = new Rectangle(Position.ToPoint(), size.ToPoint());
+            Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());
         }
 
         public override void Initialize()
@@ -39,24 +29,19 @@ namespace WindowSystem
 
         public override void LoadContent()
         {
-
         }
 
         public override void Update(GameTime gameTime)
         {
-
         }
 
         public override void Resized()
         {
-            // base.Resized();
         }
 
         public override void Draw(GameTime gameTime)
         {
         }
-
-
 
     }
 }

@@ -12,10 +12,6 @@ namespace WindowSystem
 {
     public class Button : Control
     {
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
-        private readonly Vector2 size;
-
         public String Text = "Button";
 
         private Color borderColor = Color.DarkGray;
@@ -26,14 +22,10 @@ namespace WindowSystem
 
         public Texture2D Icon { get; set; }
 
-
-
-        public Button(ContentManager content, SpriteBatch spriteBatch, Vector2 position, Vector2 size)
+        public Button(Vector2 position, Vector2 size) : base()
         {
-            this.content = content;
-            this.spriteBatch = spriteBatch;
             this.Position = position;
-            this.size = size;
+            this.Size = size;
             buttonFont = content.Load<SpriteFont>("Fonts/WindowTitle");
             Bounds = new Rectangle(Position.ToPoint(), size.ToPoint());
         }
@@ -44,32 +36,28 @@ namespace WindowSystem
 
         public override void LoadContent()
         {
-
         }
 
         public override void Update(GameTime gameTime)
         {
-            
         }
 
         public override void Resized()
         {
-            // base.Resized();
         }
 
         public override void Draw(GameTime gameTime)
         {
-            Primitives2D.FillRectangle(spriteBatch, Position, size, backgroundColor);
+            Primitives2D.FillRectangle(spriteBatch, Position, Size, backgroundColor);
             if (Selected)
             {
-                Primitives2D.DrawRectangle(spriteBatch, Position, size, selectionBorderColor);
-               
+                Primitives2D.DrawRectangle(spriteBatch, Position, Size, selectionBorderColor);               
             }
             else
             {
                 if (Icon == null)
                 {
-                    Primitives2D.DrawRectangle(spriteBatch, Position, size, borderColor);
+                    Primitives2D.DrawRectangle(spriteBatch, Position, Size, borderColor);
                 }
             }
             
@@ -78,17 +66,15 @@ namespace WindowSystem
             if (Icon != null)
             {
                 spriteBatch.Draw(Icon, Bounds, Color.White);
-                spriteBatch.DrawString(buttonFont, Text, Position + (size/2 -  fontSize / 2) + new Vector2(0,size.Y/2 + 10), textColor);
+                spriteBatch.DrawString(buttonFont, Text, Position + (Size/2 -  fontSize / 2) + new Vector2(0,Size.Y/2 + 10), textColor);
             }
             else
             {
-                spriteBatch.DrawString(buttonFont, Text, Position + (size / 2 - fontSize / 2), textColor);
+                spriteBatch.DrawString(buttonFont, Text, Position + (Size / 2 - fontSize / 2), textColor);
             }
 
             // Primitives2D.DrawRectangle(spriteBatch, Bounds.Location.ToVector2(), size, Color.Yellow);
         }
-
-
 
     }
 }

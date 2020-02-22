@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using XTron;
 
 namespace WindowSystem
@@ -31,6 +33,11 @@ namespace WindowSystem
 
         public Rectangle Startbounds { get; set; }
 
+        public GraphicsDeviceManager graphicsDevice { get; protected set; }
+        public ContentManager content { get; protected set; }
+        public SpriteBatch spriteBatch { get; protected set; }
+
+
         public void AddChild(Control c)
         {
             if(!(this is WindowManager))
@@ -46,6 +53,18 @@ namespace WindowSystem
             }
             children.Add(c);
             Resized();
+        }
+
+        protected Control()
+        {
+            if (this is WindowManager)
+            {
+                return;
+            }
+               
+            this.content = WindowManager.GetInstance().content;
+            this.spriteBatch = WindowManager.GetInstance().spriteBatch;
+            this.graphicsDevice = WindowManager.GetInstance().graphicsDevice;
         }
 
         public List<Control> GetChildren()

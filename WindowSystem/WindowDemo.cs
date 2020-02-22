@@ -77,21 +77,21 @@ namespace WindowSystem
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            windowManager = new WindowManager(graphics, Content, spriteBatch);
+            windowManager =  WindowManager.CreateInstance(graphics, Content, spriteBatch);
 
-            Button icon = new Button(Content, spriteBatch, new Vector2(32, 32), new Vector2(64, 64));
+            Button icon = new Button(new Vector2(32, 32), new Vector2(64, 64));
             icon.Text = "Editor";
             icon.ControlClicked += HandleButtonClick;
             icon.Icon = Content.Load<Texture2D>("Icons/044-memo");
             windowManager.AddChild(icon);
 
-            Button appsButton = new Button(Content, spriteBatch, new Vector2(128, 32), new Vector2(64, 64));
+            Button appsButton = new Button(new Vector2(128, 32), new Vector2(64, 64));
             appsButton.Text = "Apps";
             appsButton.ControlClicked += HandleAppsButtonClick;
             appsButton.Icon = Content.Load<Texture2D>("Icons/034-favourites");
             windowManager.AddChild(appsButton);
 
-            Button settingsButton = new Button(Content, spriteBatch, new Vector2(224, 32), new Vector2(64, 64));
+            Button settingsButton = new Button(new Vector2(224, 32), new Vector2(64, 64));
             settingsButton.Text = "Settings";
             settingsButton.ControlClicked += HandleSettingsButtonClick;
             settingsButton.Icon = Content.Load<Texture2D>("Icons/051-settings");
@@ -106,16 +106,16 @@ namespace WindowSystem
             Window settingsWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
             settingsWindow.Title = "Settings";
 
-            Label general = new Label(Content, spriteBatch, new Vector2(32, 32),"General");
+            Label general = new Label(new Vector2(32, 32),"General");
             settingsWindow.AddChild(general);
 
-            CheckBox saveSettingsBox = new CheckBox(Content, spriteBatch, new Vector2(32, 64), "Save settings on exit");
+            CheckBox saveSettingsBox = new CheckBox(new Vector2(32, 64), "Save settings on exit");
             settingsWindow.AddChild(saveSettingsBox);
 
-            CheckBox restoreLayout = new CheckBox(Content, spriteBatch, new Vector2(32, 96), "Restore layout");
+            CheckBox restoreLayout = new CheckBox(new Vector2(32, 96), "Restore layout");
             settingsWindow.AddChild(restoreLayout);
 
-            fullscreenBox = new CheckBox(Content, spriteBatch, new Vector2(32, 128), "Fullscreen");
+            fullscreenBox = new CheckBox(new Vector2(32, 128), "Fullscreen");
             settingsWindow.AddChild(fullscreenBox);
             fullscreenBox.Checked = false;
 
@@ -153,7 +153,7 @@ namespace WindowSystem
 
             foreach(String name in apps)
             {
-                Button appsButton = new Button(Content, spriteBatch, new Vector2(32+column*96, 64 + row * 96), new Vector2(64, 64));
+                Button appsButton = new Button(new Vector2(32+column*96, 64 + row * 96), new Vector2(64, 64));
                 appsButton.Text = apps[column];
                 
                 if (apps[column] == "Music")
@@ -183,11 +183,11 @@ namespace WindowSystem
             musicPlayerWindow = windowManager.AddWindow(new Vector2(100, 300), new Vector2(1024, 300));
             musicPlayerWindow.Title = "MusicPlayer";
 
-            Button rewindButton = new Button(Content, spriteBatch, new Vector2(32, 32), new Vector2(64 , 64));
+            Button rewindButton = new Button(new Vector2(32, 32), new Vector2(64 , 64));
             rewindButton.Text = "";
             rewindButton.Icon = Content.Load<Texture2D>("Icons/055-rewind");
 
-            Button playButton = new Button(Content, spriteBatch, new Vector2(96, 32), new Vector2(64, 64));
+            Button playButton = new Button( new Vector2(96, 32), new Vector2(64, 64));
             playButton.Text = "";
             playButton.Icon = Content.Load<Texture2D>("Icons/054-play");
 
@@ -203,12 +203,12 @@ namespace WindowSystem
             closeWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
             closeWindow.Title = "Editor";
 
-            Button b1 = new Button(Content, spriteBatch, new Vector2(30, 30), new Vector2(150, 50));
+            Button b1 = new Button(new Vector2(30, 30), new Vector2(150, 50));
             b1.Text = "Close";
             closeWindow.AddChild(b1);
             b1.ControlClicked += HandleCloseButtonClick;
 
-            TextEditorControl te = new TextEditorControl(Content, spriteBatch, new Vector2(10, 90), new Vector2(950, 600));
+            TextEditorControl te = new TextEditorControl(new Vector2(10, 90), new Vector2(950, 600));
             closeWindow.AddChild(te);
             te.Text = dummyText;
 

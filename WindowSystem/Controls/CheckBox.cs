@@ -12,8 +12,6 @@ namespace WindowSystem
 {
     public class CheckBox : Control
     {
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
         private readonly Vector2 size;
 
         public String Text { get; set; } = "CheckBox";
@@ -28,10 +26,8 @@ namespace WindowSystem
 
         public bool Checked { get; set; } = true;
 
-        public CheckBox(ContentManager content, SpriteBatch spriteBatch, Vector2 position, String text)
+        public CheckBox(Vector2 position, String text) : base()
         {
-            this.content = content;
-            this.spriteBatch = spriteBatch;
             Text = text;
             this.Position = position;
             labelFont = content.Load<SpriteFont>("Fonts/LabelFont");

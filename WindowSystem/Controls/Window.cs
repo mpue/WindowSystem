@@ -12,14 +12,9 @@ namespace WindowSystem
 {
     public class Window : Control
     {
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
         private SpriteFont windowTitle;
-        
 
         public String Title { get; set; } = "Window";
-
-        public Vector2 Size { get; set; }
 
         private Vector2 shadowOffset = new Vector2(4, 4);        
         private Color titleFontColor = Color.Black;
@@ -34,10 +29,8 @@ namespace WindowSystem
 
         public Rectangle closeHandle { get; set; }
 
-        public Window(ContentManager content, SpriteBatch spriteBatch, Vector2 position, Vector2 size)
-        {
-            this.content = content;
-            this.spriteBatch = spriteBatch;
+        public Window(Vector2 position, Vector2 size) : base()
+        {            
             Position = position;
             Size = size;
             Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());

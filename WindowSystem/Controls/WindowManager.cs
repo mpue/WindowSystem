@@ -14,6 +14,22 @@ namespace WindowSystem
 {
     public class WindowManager : Control
     {
+        public static WindowManager instance = null;
+
+        public static WindowManager CreateInstance(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
+        {
+            if (instance == null)
+            {
+                instance = new WindowManager(graphicsDevice, content, spriteBatch);
+            }
+            return instance;
+        }
+
+        public static WindowManager GetInstance()
+        {
+            return instance;
+        }
+
         public static readonly float GLOBAL_SCALE = 2.0f;
 
         private Vector2 mouseDownPosition = new Vector2(0, 0);
@@ -23,10 +39,6 @@ namespace WindowSystem
         private Vector2 dragStartSize = new Vector2(0, 0);
 
         public float Zoom { get; set; } = 1.0f;
-
-        private readonly GraphicsDeviceManager graphicsDevice;
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
 
         private Window currentWindow;
         private Control currentControl;
@@ -46,7 +58,12 @@ namespace WindowSystem
 
         private Mode mode = Mode.SELECT;
 
-        public WindowManager(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
+        static WindowManager()
+        {
+
+        }
+
+        private WindowManager(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
         {
             this.graphicsDevice = graphicsDevice;
             this.content = content;
@@ -89,7 +106,7 @@ namespace WindowSystem
 
         public Window AddWindow(Vector2 position, Vector2 size)
         {
-            Window win = new Window(content, spriteBatch, position, size);
+            Window win = new Window(position, size);
 
             int maxZ = 0;
 

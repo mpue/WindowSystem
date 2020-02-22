@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using XTron;
 
 namespace WindowSystem
 {
     public class TextEditorControl : Control
     {
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
         private readonly StringBuilder sb = new StringBuilder();
 
         private int row = 0;
@@ -40,9 +35,7 @@ namespace WindowSystem
                 foreach(string s in lines)
                 {
                     buffers.Add(s);
-                }
-
-
+                }                
             } 
         }
 
@@ -61,10 +54,8 @@ namespace WindowSystem
 
         private RasterizerState rasterizerState;
 
-        public TextEditorControl(ContentManager content, SpriteBatch spriteBatch, Vector2 position, Vector2 size)
+        public TextEditorControl(Vector2 position, Vector2 size) : base()
         {
-            this.content = content;
-            this.spriteBatch = spriteBatch;
             this.Position = position;
             this.Size = size;
             editorFont = content.Load<SpriteFont>("Fonts/WindowTitle");
@@ -79,7 +70,6 @@ namespace WindowSystem
 
         public override void LoadContent()
         {
-
         }
 
         public override void Update(GameTime gameTime)
@@ -101,8 +91,7 @@ namespace WindowSystem
             {
                 cursor = "";
             }
-                        
-                
+                                    
         }
 
         public override void Draw(GameTime gameTime)
@@ -111,7 +100,6 @@ namespace WindowSystem
             if (Selected)
             {
                 Primitives2D.DrawRectangle(spriteBatch, Position, Size, selectionBorderColor);
-
             }
             else
             {
@@ -129,8 +117,8 @@ namespace WindowSystem
 
             //Set the current scissor rectangle
             spriteBatch.GraphicsDevice.ScissorRectangle = Bounds;
-            spriteBatch.DrawString(editorFont, Text, Position + new Vector2(20, 20), Color.Black);
-            spriteBatch.DrawString(editorFont, cursor, Position + new Vector2(fontMetrics.X,row * editorFont.LineSpacing) + new Vector2(20, 20), Color.Black);
+            spriteBatch.DrawString(editorFont, Text, Position + new Vector2(20, 20), textColor);
+            spriteBatch.DrawString(editorFont, cursor, Position + new Vector2(fontMetrics.X,row * editorFont.LineSpacing) + new Vector2(20, 20), textColor);
             spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
             spriteBatch.GraphicsDevice.RasterizerState = state;
 
@@ -144,7 +132,7 @@ namespace WindowSystem
                 buffers[row] = buffers[row].Insert(col, " ");
                 col++;
             }
-            else if (s >= 0x41)
+            else if (s >= 0x30)
             {
                 buffers[row] = buffers[row].Insert(col, new string(s, 1));
                 col++;
@@ -167,6 +155,16 @@ namespace WindowSystem
                 col = 0;
                 row++;
 
+            }
+            // end
+            else if (s == 0x23)
+            {
+                col = buffers[row].Length;
+            }
+            // home
+            else if (s == 0x24)
+            {
+                col = 0;
             }
             // cursor left
             else if (s == 0x25)
@@ -217,8 +215,6 @@ namespace WindowSystem
                 }
             }
 
-        }
-            
-
+        }       
     }
 }

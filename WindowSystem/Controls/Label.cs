@@ -12,8 +12,6 @@ namespace WindowSystem
 {
     public class Label : Control
     {
-        private readonly ContentManager content;
-        private readonly SpriteBatch spriteBatch;
         private readonly Vector2 size;
 
         public String Text { get; set; } = "Label";
@@ -26,12 +24,8 @@ namespace WindowSystem
 
         public Texture2D Icon { get; set; }
 
-
-
-        public Label(ContentManager content, SpriteBatch spriteBatch, Vector2 position, String text)
+        public Label(Vector2 position, String text) : base()
         {
-            this.content = content;
-            this.spriteBatch = spriteBatch;
             Text = text;
             this.Position = position;
             labelFont = content.Load<SpriteFont>("Fonts/LabelFont");
@@ -45,17 +39,14 @@ namespace WindowSystem
 
         public override void LoadContent()
         {
-
         }
 
         public override void Update(GameTime gameTime)
         {
-
         }
 
         public override void Resized()
         {
-            // base.Resized();
         }
 
         public override void Draw(GameTime gameTime)
@@ -63,8 +54,6 @@ namespace WindowSystem
             Vector2 fontSize = labelFont.MeasureString(Text);
             spriteBatch.DrawString(labelFont, Text, Position + new Vector2(0,fontSize.Y/2), textColor);
         }
-
-
 
     }
 }

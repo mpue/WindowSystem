@@ -33,9 +33,17 @@ namespace WindowSystem
 
         public void AddChild(Control c)
         {
-            c.Position += Position;
-            Rectangle bounds = new Rectangle(c.Position.ToPoint(),  c.Bounds.Size);
-            c.Bounds = bounds;
+            if(!(this is WindowManager))
+            {
+                c.Position += Position;
+                Rectangle bounds = new Rectangle(c.Position.ToPoint(),  c.Bounds.Size);
+                if (bounds.Width > 0 && bounds.Height > 0)
+                {
+                    c.Bounds = bounds;
+                }
+
+                    
+            }
             children.Add(c);
             Resized();
         }
@@ -117,6 +125,21 @@ namespace WindowSystem
 
         }
 
+        public virtual void OnClick(ControlEventArgs e)
+        {
+            EventHandler handler = ControlClicked;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public class ControlEventArgs : EventArgs
+        {
+
+        }
+
+        public event EventHandler ControlClicked;
 
     }
 }

@@ -17,6 +17,16 @@ namespace WindowSystem
         private Camera camera;
         Window closeWindow;
 
+        String[] apps = { "Recorder", "Browser", "Sound", "Gallery", "Video" , "Music", "Health", "Weather","Download","Mobile"  };
+
+        private readonly string dummyText = "Lorem ipsum dolor sit amet, et his phaedrum intellegat, \n" +
+            "ut dicta propriae ullamcorper eos. Movet putent constituam est id. Solet nonumy duo id,\n " +
+            "docendi constituam duo no, dicta movet dissentiet pro at. Est te intellegat delicatissimi,\n" +
+            " vel no iudico quando intellegebat.\n" +
+            "Mutat audire sed te, sale dolor tacimates pro cu, ut nam elit mandamus oportere.\n" +
+            "An sed etiam antiopam.Ea dicunt quaeque conceptam quo.Accusata interpretaris mei eu, agam impedit vis ad. \n" +
+            "Qui eu audiam scriptorem, utamur pertinax ocurreret et nam.Ad usu natum interesset, et nulla scripserit ius.\n";
+
         public WindowDemo()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,12 +37,21 @@ namespace WindowSystem
             int h = 1080;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = w;
             graphics.PreferredBackBufferHeight = h;
-            
             graphics.ApplyChanges();
-           // graphics.ToggleFullScreen();
+            // graphics.ToggleFullScreen();
 
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += WindowSizeChanged;
             IsMouseVisible = true;
             camera = new Camera();
+        }
+
+        private void WindowSizeChanged(object sender, EventArgs e)
+        {
+            if (windowManager != null)
+            {
+                windowManager.Resized();
+            }
         }
 
         /// <summary>
@@ -56,39 +75,71 @@ namespace WindowSystem
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            windowManager = new WindowManager(Content, spriteBatch);
+            windowManager = new WindowManager(graphics, Content, spriteBatch);
 
-            Window w1 = windowManager.AddWindow(new Vector2(100, 100), new Vector2(640, 480));
-
-            Button b1 = new Button(Content, spriteBatch, new Vector2(30, 30), new Vector2(150, 50));
-            b1.Text = "Add window";
-            w1.AddChild(b1);
-
-            b1.ButtonClicked += HandleButtonClick;
-
-            windowManager.AddWindow(new Vector2(200, 200), new Vector2(640, 480));
-
-            Button icon = new Button(Content, spriteBatch, new Vector2(30, 30), new Vector2(64, 64));
-            icon.Text = "Icon";
-            icon.ButtonClicked += HandleButtonClick;
-
+            Button icon = new Button(Content, spriteBatch, new Vector2(32, 32), new Vector2(64, 64));
+            icon.Text = "Editor";
+            icon.ControlClicked += HandleButtonClick;
+            icon.Icon = Content.Load<Texture2D>("Icons/044-memo");
             windowManager.AddChild(icon);
+
+            Button appsButton = new Button(Content, spriteBatch, new Vector2(128, 32), new Vector2(64, 64));
+            appsButton.Text = "Apps";
+            appsButton.ControlClicked += HandleAppsButtonClick;
+            appsButton.Icon = Content.Load<Texture2D>("Icons/034-favourites");
+            windowManager.AddChild(appsButton);
+
 
             // TODO: use this.Content to load your game content here
         }
 
+        private void HandleAppsButtonClick(object sender, EventArgs e)
+        {
+            Window appsWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
+            appsWindow.Title = "Applications";
+
+            int index = 20;
+            int column = 0;
+            int row = 0;
+
+            foreach(String name in apps)
+            {
+                Button appsButton = new Button(Content, spriteBatch, new Vector2(32+column*96, 64 + row * 96), new Vector2(64, 64));
+                appsButton.Text = apps[column];
+                
+                appsButton.Icon = Content.Load<Texture2D>("Icons/0"+ index +"-"+apps[index-20].ToLower());
+                appsWindow.AddChild(appsButton);
+                index++;
+
+                if (column < 5) { 
+                    column++;
+                }
+                else
+                {
+                    column = 0;
+                    row++;
+                }
+
+
+
+            }
+
+
+        }
+
         private void HandleButtonClick(object sender, EventArgs e)
         {            
-
             closeWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
+            closeWindow.Title = "Editor";
 
             Button b1 = new Button(Content, spriteBatch, new Vector2(30, 30), new Vector2(150, 50));
             b1.Text = "Close";
             closeWindow.AddChild(b1);
-            b1.ButtonClicked += HandleCloseButtonClick;
+            b1.ControlClicked += HandleCloseButtonClick;
 
-            TextEditorControl te = new TextEditorControl(Content, spriteBatch, new Vector2(30, 90), new Vector2(950, 600));
+            TextEditorControl te = new TextEditorControl(Content, spriteBatch, new Vector2(10, 90), new Vector2(950, 600));
             closeWindow.AddChild(te);
+            te.Text = dummyText;
 
         }
 
@@ -166,7 +217,7 @@ namespace WindowSystem
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.LightGray);
+            GraphicsDevice.Clear(Color.Transparent);
             // spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.TranslationMatrix);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
                      null, null, graphics.GraphicsDevice.RasterizerState);

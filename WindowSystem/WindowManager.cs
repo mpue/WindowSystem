@@ -24,14 +24,19 @@ namespace WindowSystem
 
         public float Zoom { get; set; } = 1.0f;
 
+        private readonly GraphicsDeviceManager graphicsDevice;
         private readonly ContentManager content;
         private readonly SpriteBatch spriteBatch;
 
         private Window currentWindow;
+        private Control currentControl;
+        
         private List<Window> windows = new List<Window>();
         private Texture2D background;
         private KeyboardManager keyboardManager;
         
+        
+
         private enum Mode
         {
             SELECT,
@@ -41,8 +46,9 @@ namespace WindowSystem
 
         private Mode mode = Mode.SELECT;
 
-        public WindowManager(ContentManager content, SpriteBatch spriteBatch)
+        public WindowManager(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
         {
+            this.graphicsDevice = graphicsDevice;
             this.content = content;
             this.spriteBatch = spriteBatch;
             this.keyboardManager = new KeyboardManager();
@@ -103,11 +109,16 @@ namespace WindowSystem
             return win;
         }
 
+        public override void Resized()
+        {
+            Bounds = new Rectangle(0, 0, graphicsDevice.PreferredBackBufferWidth, graphicsDevice.PreferredBackBufferHeight);
+        }
+
         public override void Draw(GameTime gameTime)
         {
             if (background != null)
             {
-                spriteBatch.Draw(background, new Vector2(0, 0), Color.White);
+                spriteBatch.Draw(background, Bounds, background.Bounds, Color.White);
 
             }               
 
@@ -125,6 +136,30 @@ namespace WindowSystem
 
         public override void LoadContent()
         {
+        }
+
+        private void HandleIconActions()
+        {
+            bool hit = false;
+
+            foreach(Control c in children)
+            {
+                if (c.Bounds.Contains(mousePosition.ToPoint()))
+                {
+                    currentControl = c;
+                    currentControl.Selected = true;
+                    hit = true;
+                }
+                else
+                {
+                    c.Selected = false;
+                }
+                if(!hit)
+                {
+                    currentControl = null;
+                }
+
+            }
         }
 
         private void HandleSelection()
@@ -192,9 +227,8 @@ namespace WindowSystem
                 }
 
                 // process event handler for selected control
-
+             
                 
-                ProcessEvents(currentWindow);
 
             }
  
@@ -202,18 +236,20 @@ namespace WindowSystem
 
         private void ProcessEvents(Control control)
         {
+            if (control == null)
+            {
+                return;
+            }
+
             foreach (Control child in control.GetChildren())
             {
                 if (child.Bounds.Contains(mousePosition))
                 {
                     child.Selected = true;
-                    if (currentWindow != null)
+                    if (currentWindow != null) { 
                         currentWindow.Selected = false;
-                    if (child is Button)
-                    {
-                        Button b = child as Button;
-                        b.OnClick(new Button.ButtonEventArgs());
                     }
+                    child.OnClick(new ControlEventArgs());
                 }
                 else
                 {
@@ -226,9 +262,8 @@ namespace WindowSystem
 
         private void handleMouseDown()
         {
-            ProcessEvents(this);
-            HandleWindowActions();
             HandleSelection();
+            HandleIconActions();
 
             windows = windows.OrderBy(o => o.ZOrder).ToList();
 
@@ -246,12 +281,19 @@ namespace WindowSystem
                     {
                         mode = Mode.RESIZE;
                     }
-                    else
+                    else if (currentWindow.IsOnWindowTitle(mousePosition))
                     {
                         mode = Mode.MOVE;
                         currentWindow.StartUpdate(dragStartPos);
                     }    
 
+                }
+
+                if(currentControl != null)
+                {
+                    dragStartPos = currentControl.Position;
+                    dragStartSize = currentControl.Size;
+                    currentControl.StartUpdate(dragStartPos);
                 }
             }
         }
@@ -276,6 +318,10 @@ namespace WindowSystem
 
         private void handleMouseUp()
         {
+            if (mode != Mode.MOVE)
+                ProcessEvents(this);
+            ProcessEvents(currentWindow);
+            HandleWindowActions();
             mode = Mode.SELECT;
             windows = windows.OrderBy(o => o.ZOrder).ToList();            
          }
@@ -287,10 +333,11 @@ namespace WindowSystem
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
+                mouseDelta = mousePosition - mouseDownPosition;
+                
                 if (currentWindow != null)
                 {
-                    mouseDelta = mousePosition - mouseDownPosition;
-                    if (mode == Mode.RESIZE) { 
+                    if (mode == Mode.RESIZE) {
                         Vector2 size = dragStartSize + mouseDelta;
                         currentWindow.Size = size;
                         Rectangle bounds = currentWindow.Bounds;
@@ -298,15 +345,26 @@ namespace WindowSystem
                         currentWindow.Bounds = bounds;
                         currentWindow.Resized();
                     }
-                    else { 
+                    else if (mode == Mode.MOVE) {                      
                         Vector2 pos = dragStartPos + mouseDelta;
                         currentWindow.Position = pos;
                         currentWindow.UpdateChildren(mouseDelta);
                         Rectangle bounds = currentWindow.Bounds;
                         bounds.Location = pos.ToPoint();
-                        currentWindow.Bounds = bounds;
+                        currentWindow.Bounds = bounds;                        
                     }
 
+                }
+
+                if (currentControl != null)
+                {
+                    mode = Mode.MOVE;
+                    Vector2 pos = dragStartPos + mouseDelta;
+                    currentControl.Position = pos;
+                    currentControl.UpdateChildren(mouseDelta);
+                    Rectangle bounds = currentControl.Bounds;
+                    bounds.Location = pos.ToPoint();
+                    currentControl.Bounds = bounds;
                 }
             }
         }

@@ -14,15 +14,37 @@ namespace WindowSystem
     {
         private readonly ContentManager content;
         private readonly SpriteBatch spriteBatch;
-        
+        private readonly StringBuilder sb = new StringBuilder();
 
-        public String Text { get; set; }  = "Lorem ipsum dolor sit amet, et his phaedrum intellegat, \n"+
-            "ut dicta propriae ullamcorper eos. Movet putent constituam est id. Solet nonumy duo id,\n "+
-            "docendi constituam duo no, dicta movet dissentiet pro at. Est te intellegat delicatissimi,\n" +
-            " vel no iudico quando intellegebat.\n"+
-            "Mutat audire sed te, sale dolor tacimates pro cu, ut nam elit mandamus oportere.\n" +
-            "An sed etiam antiopam.Ea dicunt quaeque conceptam quo.Accusata interpretaris mei eu, agam impedit vis ad. \n" +
-            "Qui eu audiam scriptorem, utamur pertinax ocurreret et nam.Ad usu natum interesset, et nulla scripserit ius.\n";
+        private int row = 0;
+        private int col = 0;
+
+        public String Text { 
+            get
+            {
+                sb.Clear();
+
+                foreach(string s in buffers)
+                {
+                    sb.Append(s);
+                    sb.Append("\n");
+                }
+
+                return sb.ToString();
+            } 
+            set
+            {
+                buffers.Clear();
+                string[] lines = value.Split(new[] { '\r', '\n' });
+
+                foreach(string s in lines)
+                {
+                    buffers.Add(s);
+                }
+
+
+            } 
+        }
 
         private Color borderColor = Color.DarkGray;
         private Color textColor = Color.Black;
@@ -31,6 +53,8 @@ namespace WindowSystem
         private SpriteFont editorFont;
         private bool cursorVisible = false;
         private String cursor = "_";
+
+        List<string> buffers = new List<string>();
 
         private float currentTime = 0;
         private float blinkInterval = 1.0f;
@@ -100,9 +124,13 @@ namespace WindowSystem
             //Copy the current scissor rect so we can restore it after
             Rectangle currentRect = spriteBatch.GraphicsDevice.ScissorRectangle;
 
+            string currentString = buffers[row].Substring(0, col);
+            Vector2 fontMetrics = editorFont.MeasureString(currentString);
+
             //Set the current scissor rectangle
             spriteBatch.GraphicsDevice.ScissorRectangle = Bounds;
-            spriteBatch.DrawString(editorFont, Text + cursor, Position + new Vector2(20, 20), Color.Black);
+            spriteBatch.DrawString(editorFont, Text, Position + new Vector2(20, 20), Color.Black);
+            spriteBatch.DrawString(editorFont, cursor, Position + new Vector2(fontMetrics.X,row * editorFont.LineSpacing) + new Vector2(20, 20), Color.Black);
             spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
             spriteBatch.GraphicsDevice.RasterizerState = state;
 
@@ -111,19 +139,83 @@ namespace WindowSystem
                                                                                                                                         
         public void Add(char s)
         {
-            if (s >= 0x20)
+            if (s == 0x20)
             {
-                Text += new String(s, 1);
+                buffers[row] = buffers[row].Insert(col, " ");
+                col++;
             }
-            else if (s == 0x08)
+            else if (s >= 0x41)
             {
-                Text = Text.Substring(0, Text.Length - 1);
-            }
-            else if (s == 0x0a)
-            {
-                Text += "\n";
+                buffers[row] = buffers[row].Insert(col, new string(s, 1));
+                col++;
             }
 
+            else if (s == 0x08)
+            {
+                if (col > 0)
+                {
+                    buffers[row] = buffers[row].Remove(col-1, 1);
+                    col--;
+                }
+            }
+            // enter
+            else if (s == 0x0a)
+            {
+                String second = buffers[row].Substring(col);
+                buffers[row] = buffers[row].Substring(0, col) ;
+                buffers.Insert(row+1, second);
+                col = 0;
+                row++;
+
+            }
+            // cursor left
+            else if (s == 0x25)
+            {
+                if (col > 0)
+                {
+                    col--;
+                }
+                else
+                {
+                    col = buffers[row - 1].Length;
+                    if (row > 0)
+                    {
+                        row--;
+                    }
+                }
+            }
+            // cursor right
+            else if (s == 0x27)
+            {
+                if (col < buffers[row].Length)
+                {
+                    col++;
+                }
+                else
+                {
+                    if (row < buffers.Count - 2)
+                    {
+                        col = 0;
+                        row++;
+                    }
+                }
+            }
+            // cursor up 
+            else if (s == 0x26)
+            {
+                if (row > 0)
+                {
+                    row--;
+                }                            
+            }
+            // cursor down
+            else if (s == 0x28)
+            {
+                if (row < buffers.Count - 2)
+                {
+                    row++;
+                }
+            }
 
         }
             

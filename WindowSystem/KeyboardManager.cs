@@ -113,17 +113,17 @@ namespace WindowSystem
                 case Keys.PageDown:
                     break;
                 case Keys.End:
-                    break;
+                    return (char)k;
                 case Keys.Home:
-                    break;
+                    return (char)k;
                 case Keys.Left:
-                    break;
+                    return (char)k;
                 case Keys.Up:
-                    break;
+                    return (char)k;
                 case Keys.Right:
-                    break;
+                    return (char)k;
                 case Keys.Down:
-                    break;
+                    return (char)k;
                 case Keys.Select:
                     break;
                 case Keys.Print:

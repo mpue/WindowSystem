@@ -24,21 +24,9 @@ namespace WindowSystem
         private Color backgroundColor = Color.White;
         private SpriteFont buttonFont;
 
-        public virtual void OnClick(ButtonEventArgs e)
-        {
-            EventHandler handler = ButtonClicked;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
+        public Texture2D Icon { get; set; }
 
-        public class ButtonEventArgs : EventArgs
-        {
 
-        }
-
-        public event EventHandler ButtonClicked;
 
         public Button(ContentManager content, SpriteBatch spriteBatch, Vector2 position, Vector2 size)
         {
@@ -64,6 +52,11 @@ namespace WindowSystem
             
         }
 
+        public override void Resized()
+        {
+            // base.Resized();
+        }
+
         public override void Draw(GameTime gameTime)
         {
             Primitives2D.FillRectangle(spriteBatch, Position, size, backgroundColor);
@@ -76,9 +69,19 @@ namespace WindowSystem
             {
                 Primitives2D.DrawRectangle(spriteBatch, Position, size, borderColor);
             }
+            
             Vector2 fontSize = buttonFont.MeasureString(Text);
 
-            spriteBatch.DrawString(buttonFont, Text, Position + (size/2 -  fontSize / 2), textColor);
+            if (Icon != null)
+            {
+                spriteBatch.Draw(Icon, Bounds, Color.White);
+                spriteBatch.DrawString(buttonFont, Text, Position + (size/2 -  fontSize / 2) + new Vector2(0,size.Y/2 + 10), textColor);
+            }
+            else
+            {
+                spriteBatch.DrawString(buttonFont, Text, Position + (size / 2 - fontSize / 2), textColor);
+            }
+
             // Primitives2D.DrawRectangle(spriteBatch, Bounds.Location.ToVector2(), size, Color.Yellow);
         }
 

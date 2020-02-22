@@ -27,7 +27,7 @@ namespace WindowSystem
         private Color borderColor = Color.DarkGray;
         private Color titleBarColor = Color.White;
         private Color selectionBorderColor = Color.Orange;
-        private Color windowBackgroundColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+        private Color windowBackgroundColor = Color.White; //new Color(0.5f, 0.5f, 0.5f, 0.5f);
         private Color seperatorColor = Color.GhostWhite;
 
         public int ZOrder { get; set; } = 0;
@@ -62,6 +62,13 @@ namespace WindowSystem
         {
             Rectangle r = new Rectangle((Position + Size + new Vector2(-20, -20)).ToPoint(), new Point(20, 20));
             return r.Contains(position.ToPoint());
+        }
+
+        public bool IsOnWindowTitle(Vector2 position)
+        {
+            Rectangle r = new Rectangle(Position.ToPoint(), new Point((int)Size.X, 25));
+            return r.Contains(position.ToPoint());
+
         }
 
 

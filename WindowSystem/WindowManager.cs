@@ -250,6 +250,14 @@ namespace WindowSystem
                         currentWindow.Selected = false;
                     }
                     child.OnClick(new ControlEventArgs());
+
+                    if (child is CheckBox)
+                    {
+                        CheckBox cb = child as CheckBox;
+
+                        cb.Checked = !cb.Checked;
+
+                    }
                 }
                 else
                 {

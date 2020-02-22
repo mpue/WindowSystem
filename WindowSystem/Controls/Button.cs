@@ -67,7 +67,10 @@ namespace WindowSystem
             }
             else
             {
-                Primitives2D.DrawRectangle(spriteBatch, Position, size, borderColor);
+                if (Icon == null)
+                {
+                    Primitives2D.DrawRectangle(spriteBatch, Position, size, borderColor);
+                }
             }
             
             Vector2 fontSize = buttonFont.MeasureString(Text);

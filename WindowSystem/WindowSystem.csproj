@@ -42,12 +42,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AbstractEntity.cs" />
-    <Compile Include="Button.cs" />
+    <Compile Include="Controls\Button.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Control.cs" />
+    <Compile Include="Controls\CheckBox.cs" />
+    <Compile Include="Controls\Label.cs" />
     <Compile Include="KeyboardManager.cs" />
-    <Compile Include="TextEditorControl.cs" />
-    <Compile Include="Window.cs" />
+    <Compile Include="Controls\TextEditorControl.cs" />
+    <Compile Include="Controls\Window.cs" />
     <Compile Include="WindowDemo.cs" />
     <Compile Include="Primitives2D.cs" />
     <Compile Include="Program.cs" />

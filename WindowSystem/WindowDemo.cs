@@ -89,8 +89,30 @@ namespace WindowSystem
             appsButton.Icon = Content.Load<Texture2D>("Icons/034-favourites");
             windowManager.AddChild(appsButton);
 
+            Button settingsButton = new Button(Content, spriteBatch, new Vector2(224, 32), new Vector2(64, 64));
+            settingsButton.Text = "Settings";
+            settingsButton.ControlClicked += HandleSettingsButtonClick;
+            settingsButton.Icon = Content.Load<Texture2D>("Icons/051-settings");
+            windowManager.AddChild(settingsButton);
+
 
             // TODO: use this.Content to load your game content here
+        }
+
+        private void HandleSettingsButtonClick(object sender, EventArgs e)
+        {
+            Window settingsWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
+            settingsWindow.Title = "Settings";
+
+            Label general = new Label(Content, spriteBatch, new Vector2(32, 32),"General");
+            settingsWindow.AddChild(general);
+
+            CheckBox saveSettingsBox = new CheckBox(Content, spriteBatch, new Vector2(32, 64), "Save settings on exit");
+            settingsWindow.AddChild(saveSettingsBox);
+
+            CheckBox restoreLayoui = new CheckBox(Content, spriteBatch, new Vector2(32, 96), "Restore layout");
+            settingsWindow.AddChild(restoreLayoui);
+
         }
 
         private void HandleAppsButtonClick(object sender, EventArgs e)
@@ -119,12 +141,9 @@ namespace WindowSystem
                     column = 0;
                     row++;
                 }
-
-
-
+                               
             }
-
-
+            
         }
 
         private void HandleButtonClick(object sender, EventArgs e)

@@ -16,6 +16,8 @@ namespace WindowSystem
         WindowManager windowManager;
         private Camera camera;
         Window closeWindow;
+        Window musicPlayerWindow;
+        CheckBox fullscreenBox;
 
         String[] apps = { "Recorder", "Browser", "Sound", "Gallery", "Video" , "Music", "Health", "Weather","Download","Mobile"  };
 
@@ -110,8 +112,33 @@ namespace WindowSystem
             CheckBox saveSettingsBox = new CheckBox(Content, spriteBatch, new Vector2(32, 64), "Save settings on exit");
             settingsWindow.AddChild(saveSettingsBox);
 
-            CheckBox restoreLayoui = new CheckBox(Content, spriteBatch, new Vector2(32, 96), "Restore layout");
-            settingsWindow.AddChild(restoreLayoui);
+            CheckBox restoreLayout = new CheckBox(Content, spriteBatch, new Vector2(32, 96), "Restore layout");
+            settingsWindow.AddChild(restoreLayout);
+
+            fullscreenBox = new CheckBox(Content, spriteBatch, new Vector2(32, 128), "Fullscreen");
+            settingsWindow.AddChild(fullscreenBox);
+            fullscreenBox.Checked = false;
+
+            fullscreenBox.ControlClicked += HandleFullscreenClicked;
+
+        }
+
+        private void HandleFullscreenClicked(object sender, EventArgs e)
+        {
+            if (!fullscreenBox.Checked)
+            {
+                if (!graphics.IsFullScreen)
+                {
+                    graphics.ToggleFullScreen();
+                }
+            }
+            else
+            {
+                if (graphics.IsFullScreen)
+                {
+                    graphics.ToggleFullScreen();
+                }
+            }
 
         }
 
@@ -129,6 +156,11 @@ namespace WindowSystem
                 Button appsButton = new Button(Content, spriteBatch, new Vector2(32+column*96, 64 + row * 96), new Vector2(64, 64));
                 appsButton.Text = apps[column];
                 
+                if (apps[column] == "Music")
+                {
+                    appsButton.ControlClicked += HandleMusicButtonClicked;
+                }
+
                 appsButton.Icon = Content.Load<Texture2D>("Icons/0"+ index +"-"+apps[index-20].ToLower());
                 appsWindow.AddChild(appsButton);
                 index++;
@@ -144,6 +176,26 @@ namespace WindowSystem
                                
             }
             
+        }
+
+        private void HandleMusicButtonClicked(object sender, EventArgs e)
+        {
+            musicPlayerWindow = windowManager.AddWindow(new Vector2(100, 300), new Vector2(1024, 300));
+            musicPlayerWindow.Title = "MusicPlayer";
+
+            Button rewindButton = new Button(Content, spriteBatch, new Vector2(32, 32), new Vector2(64 , 64));
+            rewindButton.Text = "";
+            rewindButton.Icon = Content.Load<Texture2D>("Icons/055-rewind");
+
+            Button playButton = new Button(Content, spriteBatch, new Vector2(96, 32), new Vector2(64, 64));
+            playButton.Text = "";
+            playButton.Icon = Content.Load<Texture2D>("Icons/054-play");
+
+            musicPlayerWindow.AddChild(rewindButton);
+            musicPlayerWindow.AddChild(playButton);
+
+            rewindButton.ControlClicked += HandleCloseButtonClick;
+
         }
 
         private void HandleButtonClick(object sender, EventArgs e)

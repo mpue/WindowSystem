@@ -41,13 +41,10 @@ namespace WindowSystem
         public float Zoom { get; set; } = 1.0f;
 
         private Window currentWindow;
-        private Control currentControl;
-        
+        private Control currentControl;       
         private List<Window> windows = new List<Window>();
         private Texture2D background;
         private KeyboardManager keyboardManager;
-        
-        
 
         private enum Mode
         {
@@ -58,10 +55,7 @@ namespace WindowSystem
 
         private Mode mode = Mode.SELECT;
 
-        static WindowManager()
-        {
-
-        }
+        static WindowManager() {}
 
         private WindowManager(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
         {
@@ -69,11 +63,9 @@ namespace WindowSystem
             this.content = content;
             this.spriteBatch = spriteBatch;
             this.keyboardManager = new KeyboardManager();
-
             this.keyboardManager.KeyPressed += HandleKeyPressed;
             this.keyboardManager.KeyReleased += HandleKeyReleased;
             background = content.Load<Texture2D>("Wallpaper/thirsty");
-         
         }
 
         private void HandleKeyReleased(object sender, EventArgs e)
@@ -215,8 +207,6 @@ namespace WindowSystem
                 }
             }
 
-            
-
             // set selected window
             if (currentWindow != null)
             {
@@ -243,10 +233,6 @@ namespace WindowSystem
                     currentWindow.ZOrder = z;
                 }
 
-                // process event handler for selected control
-             
-                
-
             }
  
         }
@@ -271,9 +257,7 @@ namespace WindowSystem
                     if (child is CheckBox)
                     {
                         CheckBox cb = child as CheckBox;
-
                         cb.Checked = !cb.Checked;
-
                     }
                 }
                 else
@@ -294,7 +278,6 @@ namespace WindowSystem
 
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
-
                 mouseDownPosition = mousePosition;
 
                 if (currentWindow != null)
@@ -393,7 +376,6 @@ namespace WindowSystem
                 }
             }
         }
-
         public override void Update(GameTime gameTime)
         {
 

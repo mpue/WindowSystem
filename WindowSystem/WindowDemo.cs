@@ -22,8 +22,6 @@ namespace WindowSystem
 
         String[] apps = { "Recorder", "Browser", "Sound", "Gallery", "Video" , "Music", "Health", "Weather","Download","Mobile"  };
 
-
-
         public WindowDemo()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -74,24 +72,38 @@ namespace WindowSystem
             spriteBatch = new SpriteBatch(GraphicsDevice);
             windowManager =  WindowManager.CreateInstance(graphics, Content, spriteBatch);
 
-            Button icon = new Button(new Vector2(32, 32), new Vector2(64, 64));
+            Button icon = new Button(new Vector2(32, 64), new Vector2(64, 64));
             icon.Text = "Editor";
             icon.ControlClicked += HandleButtonClick;
             icon.Icon = Content.Load<Texture2D>("Icons/044-memo");
             windowManager.AddChild(icon);
 
-            Button appsButton = new Button(new Vector2(128, 32), new Vector2(64, 64));
+            Button appsButton = new Button(new Vector2(128, 64), new Vector2(64, 64));
             appsButton.Text = "Apps";
             appsButton.ControlClicked += HandleAppsButtonClick;
             appsButton.Icon = Content.Load<Texture2D>("Icons/034-favourites");
             windowManager.AddChild(appsButton);
 
-            Button settingsButton = new Button(new Vector2(224, 32), new Vector2(64, 64));
+            Button settingsButton = new Button(new Vector2(224, 64), new Vector2(64, 64));
             settingsButton.Text = "Settings";
             settingsButton.ControlClicked += HandleSettingsButtonClick;
             settingsButton.Icon = Content.Load<Texture2D>("Icons/051-settings");
             windowManager.AddChild(settingsButton);
 
+            MenuBar menubar = new MenuBar(new Vector2(0, 0), new Vector2(graphics.PreferredBackBufferWidth, 35));
+            menubar.AddMenus(new String[]{ "File", "Edit", "Help"});
+            windowManager.AddChild(menubar);
+
+            Button exitButton = new Button(new Vector2(0, 35), new Vector2(90, 50));
+            exitButton.Text = "Exit";
+            exitButton.ShowBorder = false;
+
+            exitButton.ControlClicked += delegate (object sender, EventArgs e)
+            {
+                Environment.Exit(0);
+            };
+
+            menubar.GetChildren()[0].AddChild(exitButton);
 
             // TODO: use this.Content to load your game content here
         }

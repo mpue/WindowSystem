@@ -44,6 +44,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AbstractEntity.cs" />
+    <Compile Include="Controls\Menu.cs" />
+    <Compile Include="Controls\MenuBar.cs" />
     <Compile Include="Controls\Button.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="Controls\Control.cs" />

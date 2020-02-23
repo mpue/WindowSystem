@@ -35,6 +35,12 @@ namespace WindowSystem
             Bounds = new Rectangle(Position.ToPoint(), size.ToPoint());
         }
 
+
+        public override void OnClick(ControlEventArgs e)
+        {
+            Checked = !Checked;    
+        }
+
         public override void Initialize()
         {
         }

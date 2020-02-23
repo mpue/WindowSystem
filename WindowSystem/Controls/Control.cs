@@ -37,6 +37,10 @@ namespace WindowSystem
         public ContentManager content { get; protected set; }
         public SpriteBatch spriteBatch { get; protected set; }
 
+        public bool Visible { get; set; } = true;
+
+        public bool ShowBorder { get; set; } = true;
+
         public virtual void HandleKeyPressed(object sender, EventArgs e)
         {
 
@@ -84,9 +88,13 @@ namespace WindowSystem
 
         public override void Draw(GameTime gameTime)
         {
-            foreach(Control c in children)
+            if (Visible)
             {
-                c.Draw(gameTime);
+                foreach(Control c in children)
+                {
+                    c.Draw(gameTime);
+                }
+
             }
         }
 

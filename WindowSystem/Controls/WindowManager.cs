@@ -210,29 +210,30 @@ namespace WindowSystem
                 return;
             }
 
+            ProcessChildren(control);
+
+
+        }
+
+        void ProcessChildren(Control control)
+        {
             foreach (Control child in control.GetChildren())
             {
                 if (child.Bounds.Contains(mousePosition))
                 {
                     child.Selected = true;
-                    if (currentWindow != null) { 
+                    if (currentWindow != null)
+                    {
                         currentWindow.Selected = false;
                     }
                     child.OnClick(new ControlEventArgs(mousePosition));
-
-                    if (child is CheckBox)
-                    {
-                        CheckBox cb = child as CheckBox;
-                        cb.Checked = !cb.Checked;
-                    }
                 }
                 else
                 {
                     child.Selected = false;
                 }
-
+                ProcessChildren(child); 
             }
-
         }
 
         private void handleMouseDown()

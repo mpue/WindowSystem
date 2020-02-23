@@ -49,6 +49,7 @@ namespace WindowSystem
         public override void Draw(GameTime gameTime)
         {
             Primitives2D.FillRectangle(spriteBatch, Position, Size, backgroundColor);
+
             if (Selected)
             {
                 Primitives2D.DrawRectangle(spriteBatch, Position, Size, selectionBorderColor);               
@@ -57,8 +58,12 @@ namespace WindowSystem
             {
                 if (Icon == null)
                 {
-                    Primitives2D.DrawRectangle(spriteBatch, Position, Size, borderColor);
+                    if (ShowBorder)
+                    {
+                        Primitives2D.DrawRectangle(spriteBatch, Position, Size, borderColor);
+                    }
                 }
+
             }
             
             Vector2 fontSize = buttonFont.MeasureString(Text);

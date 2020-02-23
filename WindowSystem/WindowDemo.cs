@@ -16,7 +16,7 @@ namespace WindowSystem
         SpriteBatch spriteBatch;
         WindowManager windowManager;
         private Camera camera;
-        Window closeWindow;
+        Window editorWindow;
         Window musicPlayerWindow;
         CheckBox fullscreenBox;
 
@@ -104,6 +104,9 @@ namespace WindowSystem
             };
 
             menubar.GetChildren()[0].AddChild(exitButton);
+
+            CreateEditor();
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -205,14 +208,14 @@ namespace WindowSystem
 
         }
 
-        private void HandleButtonClick(object sender, EventArgs e)
-        {            
-            closeWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
-            closeWindow.Title = "Editor";
+        private void CreateEditor()
+        {
+            editorWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
+            editorWindow.Title = "Editor";
 
             Button b1 = new Button(new Vector2(30, 30), new Vector2(150, 50));
             b1.Text = "Close";
-            closeWindow.AddChild(b1);
+            editorWindow.AddChild(b1);
             b1.ControlClicked += HandleCloseButtonClick;
 
             string data = null;
@@ -229,15 +232,18 @@ namespace WindowSystem
             te.Text = data;
 
             ScrollPanel sp = new ScrollPanel(new Vector2(10, 90), new Vector2(950, 600), te);
-            
-            closeWindow.AddChild(sp);
 
+            editorWindow.AddChild(sp);
+        }
 
+        private void HandleButtonClick(object sender, EventArgs e)
+        {
+            CreateEditor();
         }
 
         private void HandleCloseButtonClick(object sender, EventArgs e)
         {
-            windowManager.Close(closeWindow);
+            windowManager.Close(editorWindow);
 
         }
 

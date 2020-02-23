@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using XTron;
 
 namespace WindowSystem
@@ -166,17 +167,52 @@ namespace WindowSystem
             }
         }
 
+        public virtual void OnMouseMove(ControlEventArgs e)
+        {
+            EventHandler handler = MouseMoved;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public virtual void OnMouseDown(ControlEventArgs e)
+        {
+            EventHandler handler = MouseDown;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public virtual void OnMouseUp(ControlEventArgs e)
+        {
+            EventHandler handler = MouseUp;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
         public class ControlEventArgs : EventArgs
         {
-            public ControlEventArgs(Vector2 position)
+            public MouseState state { get; private set; }
+
+            public ControlEventArgs(Vector2 position, MouseState state, Vector2 delta)
             {
                 Position = position;
+                this.state = state;
+                this.Delta = delta;
             }
 
             public Vector2 Position { get; set; }
+            public Vector2 Delta { get; set; }
         }
 
         public event EventHandler ControlClicked;
+        public event EventHandler MouseMoved;
+        public event EventHandler MouseDown;
+        public event EventHandler MouseUp;
 
     }
 }

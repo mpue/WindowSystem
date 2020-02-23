@@ -203,7 +203,7 @@ namespace WindowSystem
  
         }
 
-        private void ProcessEvents(Control control)
+        private void ProcessMouseUpEvents(Control control)
         {
             if (control == null)
             {
@@ -226,7 +226,7 @@ namespace WindowSystem
                     {
                         currentWindow.Selected = false;
                     }
-                    child.OnClick(new ControlEventArgs(mousePosition));
+                    child.OnClick(new ControlEventArgs(mousePosition, mouseState,mouseDelta));
                 }
                 else
                 {
@@ -271,6 +271,12 @@ namespace WindowSystem
                     currentControl.StartUpdate(dragStartPos);
                 }
             }
+
+            ProcessChildMouseDownEvents(this);
+            foreach (Window win in windows)
+            {
+                ProcessChildMouseDownEvents(win);
+            }
         }
 
         private void HandleWindowActions()
@@ -294,8 +300,13 @@ namespace WindowSystem
         private void handleMouseUp()
         {
             if (mode != Mode.MOVE)
-                ProcessEvents(this);
-            ProcessEvents(currentWindow);
+                ProcessMouseUpEvents(this);
+            ProcessMouseUpEvents(currentWindow);
+            ProcessChildMouseUpEvents(this);
+            foreach (Window win in windows)
+            {
+                ProcessChildMouseUpEvents(win);
+            }
             HandleWindowActions();
             mode = Mode.SELECT;
             windows = windows.OrderBy(o => o.ZOrder).ToList();            
@@ -342,7 +353,49 @@ namespace WindowSystem
                     currentControl.Bounds = bounds;
                 }
             }
+
+            ProcessChildMouseMoveEvents(this);
+            
+            foreach(Window win in windows)
+            {
+                ProcessChildMouseMoveEvents(win);
+            }
+
         }
+
+        public void ProcessChildMouseMoveEvents(Control control)
+        {
+            foreach (Control child in control.GetChildren())
+            {
+                ControlEventArgs args = new ControlEventArgs(mousePosition, mouseState,mouseDelta);                
+                child.OnMouseMove(args);
+                ProcessChildMouseMoveEvents(child);
+            }
+                
+        }
+
+        public void ProcessChildMouseDownEvents(Control control)
+        {
+            foreach (Control child in control.GetChildren())
+            {
+                ControlEventArgs args = new ControlEventArgs(mousePosition, mouseState, mouseDelta);
+                child.OnMouseDown(args);
+                ProcessChildMouseDownEvents(child);
+            }
+
+        }
+
+        public void ProcessChildMouseUpEvents(Control control)
+        {
+            foreach (Control child in control.GetChildren())
+            {
+                ControlEventArgs args = new ControlEventArgs(mousePosition, mouseState, mouseDelta);
+                child.OnMouseUp(args);
+                ProcessChildMouseUpEvents(child);
+            }
+
+        } 
+
         public override void Update(GameTime gameTime)
         {
 

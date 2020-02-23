@@ -9,8 +9,30 @@ using XTron;
 
 namespace WindowSystem
 {
+
+    public class KeyboardEventArgs : EventArgs
+    {
+        internal Keys OriginalKey;
+
+        public char key { get; set; }
+        public bool shift { get; set; }
+
+
+    }
+
     class KeyboardManager : AbstractEntity
     {
+
+        public static KeyboardManager instance = null;
+
+        public static KeyboardManager GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new KeyboardManager();
+            }
+            return instance;
+        }
         private Dictionary<Keys, bool> InputMap = new Dictionary<Keys, bool>();
 
         KeyboardState lastState;
@@ -20,7 +42,7 @@ namespace WindowSystem
 
 
         public bool shiftPressed = false;
-        public KeyboardManager()
+        private KeyboardManager()
         {
             var values = Enum.GetValues(typeof(Keys));
 
@@ -73,6 +95,7 @@ namespace WindowSystem
                     args.shift = state.IsKeyDown(Keys.LeftShift);
                     shiftPressed = args.shift;
                     args.key = ResolveKey(k);
+                    args.OriginalKey = k;
                     OnKeyDown(args);
                     InputMap[k] = true;
                 }
@@ -80,6 +103,7 @@ namespace WindowSystem
                 {
                     KeyboardEventArgs args = new KeyboardEventArgs();
                     args.key = ResolveKey(k);
+                    args.OriginalKey = k;
                     OnKeyUp(args);
                     InputMap[k] = false;
                 }
@@ -401,13 +425,6 @@ namespace WindowSystem
         {         
         }
 
-        public class KeyboardEventArgs : EventArgs
-        {
-            public char key { get; set; }
-            public bool shift { get; set; }
-
-
-        }
 
         public event EventHandler KeyPressed;
         public event EventHandler KeyReleased;

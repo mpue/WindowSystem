@@ -37,6 +37,11 @@ namespace WindowSystem
         public ContentManager content { get; protected set; }
         public SpriteBatch spriteBatch { get; protected set; }
 
+        public virtual void HandleKeyPressed(object sender, EventArgs e)
+        {
+
+        }
+
 
         public void AddChild(Control c)
         {
@@ -155,7 +160,12 @@ namespace WindowSystem
 
         public class ControlEventArgs : EventArgs
         {
+            public ControlEventArgs(Vector2 position)
+            {
+                Position = position;
+            }
 
+            public Vector2 Position { get; set; }
         }
 
         public event EventHandler ControlClicked;

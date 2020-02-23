@@ -48,6 +48,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\CheckBox.cs" />
+    <Compile Include="Controls\ScrollPanel.cs" />
     <Compile Include="Controls\View3D.cs" />
     <Compile Include="Controls\Label.cs" />
     <Compile Include="KeyboardManager.cs" />
@@ -68,6 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="loremipsum.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb">

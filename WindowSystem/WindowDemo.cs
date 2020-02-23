@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -21,13 +22,7 @@ namespace WindowSystem
 
         String[] apps = { "Recorder", "Browser", "Sound", "Gallery", "Video" , "Music", "Health", "Weather","Download","Mobile"  };
 
-        private readonly string dummyText = "Lorem ipsum dolor sit amet, et his phaedrum intellegat, \n" +
-            "ut dicta propriae ullamcorper eos. Movet putent constituam est id. Solet nonumy duo id,\n " +
-            "docendi constituam duo no, dicta movet dissentiet pro at. Est te intellegat delicatissimi,\n" +
-            " vel no iudico quando intellegebat.\n" +
-            "Mutat audire sed te, sale dolor tacimates pro cu, ut nam elit mandamus oportere.\n" +
-            "An sed etiam antiopam.Ea dicunt quaeque conceptam quo.Accusata interpretaris mei eu, agam impedit vis ad. \n" +
-            "Qui eu audiam scriptorem, utamur pertinax ocurreret et nam.Ad usu natum interesset, et nulla scripserit ius.\n";
+
 
         public WindowDemo()
         {
@@ -208,9 +203,23 @@ namespace WindowSystem
             closeWindow.AddChild(b1);
             b1.ControlClicked += HandleCloseButtonClick;
 
-            TextEditorControl te = new TextEditorControl(new Vector2(10, 90), new Vector2(950, 600));
-            closeWindow.AddChild(te);
-            te.Text = dummyText;
+            string data = null;
+
+            using (var stream = TitleContainer.OpenStream("loremipsum.txt"))
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    data = reader.ReadToEnd();
+                }
+            }
+
+            TextEditorControl te = new TextEditorControl(new Vector2(10, 90), new Vector2(1280, 800));
+            te.Text = data;
+
+            ScrollPanel sp = new ScrollPanel(new Vector2(10, 90), new Vector2(950, 600), te);
+            
+            closeWindow.AddChild(sp);
+
 
         }
 

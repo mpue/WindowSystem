@@ -30,7 +30,7 @@ namespace WindowSystem
             set
             {
                 buffers.Clear();
-                string[] lines = value.Split(new[] { '\r', '\n' });
+                string[] lines = value.Split(new[] { '\n' });
 
                 foreach(string s in lines)
                 {
@@ -52,7 +52,7 @@ namespace WindowSystem
         private float currentTime = 0;
         private float blinkInterval = 1.0f;
 
-        private RasterizerState rasterizerState;
+        
 
         public TextEditorControl(Vector2 position, Vector2 size) : base()
         {
@@ -60,8 +60,50 @@ namespace WindowSystem
             this.Size = size;
             editorFont = content.Load<SpriteFont>("Fonts/WindowTitle");
             Bounds = new Rectangle(Position.ToPoint(), size.ToPoint());
-            rasterizerState = new RasterizerState();
-            rasterizerState.ScissorTestEnable = true;
+            ControlClicked += HandleEditorClick;
+            KeyboardManager.GetInstance().KeyPressed += HandleKeyPressed;
+        }
+
+        public override void HandleKeyPressed(object sender, EventArgs e)
+        {
+            KeyboardEventArgs args = e as KeyboardEventArgs;
+            Add(args.key);
+        }
+
+        private void HandleEditorClick(object sender, EventArgs e)
+        {
+            ControlEventArgs args = e as ControlEventArgs;
+            Vector2 mousePosition = args.Position - Position;
+
+            float textHeight = editorFont.LineSpacing * buffers.Count;
+
+            int currentRow = (int)(mousePosition.Y / editorFont.LineSpacing) - 1;
+            if (currentRow > buffers.Count - 1)
+            {
+                currentRow = buffers.Count - 1;
+            }
+            if (currentRow < 0)
+            {
+                currentRow = 0;
+            }
+
+            row = currentRow;
+
+            float currentWidth = editorFont.MeasureString(buffers[currentRow]).X;
+            float averageWidth = currentWidth / buffers[currentRow].Length;
+            int currentCol = (int)(mousePosition.X / averageWidth ) - 1;
+
+            if (currentCol > buffers[currentRow].Length - 1)
+            {
+                currentCol = buffers[currentRow].Length - 1;
+            }
+
+            if (currentCol < 0)
+            {
+                currentCol = 0;
+            }
+
+            col = currentCol;
         }
 
         public override void Initialize()
@@ -96,31 +138,11 @@ namespace WindowSystem
 
         public override void Draw(GameTime gameTime)
         {
-            Primitives2D.FillRectangle(spriteBatch, Position, Size, backgroundColor);
-            if (Selected)
-            {
-                Primitives2D.DrawRectangle(spriteBatch, Position, Size, selectionBorderColor);
-            }
-            else
-            {
-                Primitives2D.DrawRectangle(spriteBatch, Position, Size, borderColor);
-            }
-
-            RasterizerState state = spriteBatch.GraphicsDevice.RasterizerState;
-
-            spriteBatch.GraphicsDevice.RasterizerState = rasterizerState;
-            //Copy the current scissor rect so we can restore it after
-            Rectangle currentRect = spriteBatch.GraphicsDevice.ScissorRectangle;
-
             string currentString = buffers[row].Substring(0, col);
             Vector2 fontMetrics = editorFont.MeasureString(currentString);
 
-            //Set the current scissor rectangle
-            spriteBatch.GraphicsDevice.ScissorRectangle = Bounds;
             spriteBatch.DrawString(editorFont, Text, Position + new Vector2(20, 20), textColor);
             spriteBatch.DrawString(editorFont, cursor, Position + new Vector2(fontMetrics.X,row * editorFont.LineSpacing) + new Vector2(20, 20), textColor);
-            spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
-            spriteBatch.GraphicsDevice.RasterizerState = state;
 
             // Primitives2D.DrawRectangle(spriteBatch, Bounds.Location.ToVector2(), size, Color.Yellow);
         }

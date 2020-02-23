@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using XTron;
-using static WindowSystem.KeyboardManager;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WindowSystem
 {
@@ -44,7 +39,6 @@ namespace WindowSystem
         private Control currentControl;       
         private List<Window> windows = new List<Window>();
         private Texture2D background;
-        private KeyboardManager keyboardManager;
 
         private enum Mode
         {
@@ -62,35 +56,7 @@ namespace WindowSystem
             this.graphicsDevice = graphicsDevice;
             this.content = content;
             this.spriteBatch = spriteBatch;
-            this.keyboardManager = new KeyboardManager();
-            this.keyboardManager.KeyPressed += HandleKeyPressed;
-            this.keyboardManager.KeyReleased += HandleKeyReleased;
             background = content.Load<Texture2D>("Wallpaper/thirsty");
-        }
-
-        private void HandleKeyReleased(object sender, EventArgs e)
-        {
-            KeyboardEventArgs args = e as KeyboardEventArgs;   
-
-        }
-
-        private void HandleKeyPressed(object sender, EventArgs e)
-        {
-            KeyboardEventArgs args = e as KeyboardEventArgs;
-            if (currentWindow != null)
-            {
-                foreach (Control child in currentWindow.GetChildren())
-                {
-                    if (child is TextEditorControl && child.Selected)
-                    {
-                        TextEditorControl te = child as TextEditorControl;
-                        te.Add(args.key);
-                        break;
-                    }
-                }
-
-            }
-
         }
 
         public MouseState mouseState { get; private set; }
@@ -252,7 +218,7 @@ namespace WindowSystem
                     if (currentWindow != null) { 
                         currentWindow.Selected = false;
                     }
-                    child.OnClick(new ControlEventArgs());
+                    child.OnClick(new ControlEventArgs(mousePosition));
 
                     if (child is CheckBox)
                     {
@@ -379,7 +345,7 @@ namespace WindowSystem
         public override void Update(GameTime gameTime)
         {
 
-            keyboardManager.Update(gameTime);
+            KeyboardManager.GetInstance().Update(gameTime);
             mouseState = Mouse.GetState();
 
             if (lastState != mouseState)

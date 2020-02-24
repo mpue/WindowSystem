@@ -141,7 +141,7 @@ namespace WindowSystem
 
         private void HandleFullscreenClicked(object sender, EventArgs e)
         {
-            if (!fullscreenBox.Checked)
+            if (fullscreenBox.Checked)
             {
                 if (!graphics.IsFullScreen)
                 {

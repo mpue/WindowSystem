@@ -34,7 +34,8 @@ namespace WindowSystem
 
         public override void OnClick(ControlEventArgs e)
         {
-            Checked = !Checked;    
+            Checked = !Checked;
+            base.OnClick(e);
         }
 
         public override void Initialize()

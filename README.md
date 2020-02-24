@@ -31,3 +31,25 @@ Currently it's at a very early development state.
   - persistence
   - documentation
   - coding, coding, coding...
+  
+# Important
+
+The library is not production ready yet! So use it at your own risk and don't file bugs yet, since I'm still at the very beginning.
+  
+# How do I use it?
+
+Basically you get a WindowManager instance with 
+  
+  WindowManager.CreateInstance(graphics, Content, spriteBatch);
+  
+Now you can hook up the WindowManager to your Update and Draw calls with
+
+  WindowManager.GetInstance().Update(gameTime)
+  
+Depending on what you want to do, call
+
+  WindowManager.GetInstance().Draw(gameTime)
+  
+before or after your game draw calls.
+
+For further use have a look at the WindowDemo application.

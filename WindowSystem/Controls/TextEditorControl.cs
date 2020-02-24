@@ -61,7 +61,7 @@ namespace WindowSystem
             editorFont = content.Load<SpriteFont>("Fonts/WindowTitle");
             Bounds = new Rectangle(Position.ToPoint(), size.ToPoint());
             ControlClicked += HandleEditorClick;
-            KeyboardManager.GetInstance().KeyPressed += HandleKeyPressed;
+
         }
 
         public override void HandleKeyPressed(object sender, EventArgs e)

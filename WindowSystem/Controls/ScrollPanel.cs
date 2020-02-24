@@ -28,6 +28,8 @@ namespace WindowSystem
         private readonly Control control;
         private Vector2 offset;
 
+        private Vector2 controlScale = new Vector2(1, 1);
+
         bool mouseDown = false;
 
         public ScrollPanel(Vector2 position, Vector2 size, Control control) : base()
@@ -45,6 +47,9 @@ namespace WindowSystem
             HandleStartPos = HandlePos;
             ScrollbarHandle = new Rectangle(HandleStartPos.ToPoint(), new Vector2(scollbarPos.X - 2, 50).ToPoint());
             Scrollbar  = new Rectangle( new Vector2(Position.X + Size.X - scollbarPos.X, Position.Y).ToPoint(), new Vector2(scollbarPos.X, Bounds.Height - control.MarginBR.Y / 2).ToPoint());
+
+            controlScale = new Vector2(control.Bounds.Height / Bounds.Height, control.Bounds.Width / Bounds.Width);
+
         }
 
         public override void OnMouseDown(ControlEventArgs e)
@@ -84,6 +89,7 @@ namespace WindowSystem
         {
             control.HandleKeyPressed(sender, e);
             KeyboardEventArgs args = e as KeyboardEventArgs;
+            /*
             if (args.OriginalKey == Microsoft.Xna.Framework.Input.Keys.Up)
             {
                 SetScrollPosition(scrollPosition + new Vector2(0, -10));
@@ -92,6 +98,7 @@ namespace WindowSystem
             {
                 SetScrollPosition(scrollPosition + new Vector2(0, 10));
             }
+            */
             
         }
 
@@ -104,6 +111,9 @@ namespace WindowSystem
                 Vector2 delta = e.Delta ;
                 delta.X = 0;
                 scrollPosition = HandleStartPos + delta;
+                scrollPosition.Y = scrollPosition.Y;
+
+
                 if (scrollPosition.Y < 0)
                 {
                     scrollPosition.Y = 0;
@@ -116,8 +126,6 @@ namespace WindowSystem
             }
 
         }
-
-        
 
         public override void Initialize()
         {
@@ -133,7 +141,7 @@ namespace WindowSystem
             Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());
             ScrollbarHandle = new Rectangle(new Vector2(Position.X + Size.X - scollbarPos.X + 2, Position.Y + scrollPosition.Y).ToPoint(), new Vector2(scollbarPos.X - 2, 50).ToPoint());
             this.control.Bounds = new Rectangle(Position.ToPoint() + control.Position.ToPoint() - scrollPosition.ToPoint(), control.Size.ToPoint());
-            this.control.Position = Position + offset - scrollPosition;
+            this.control.Position = Position + offset - (scrollPosition / controlScale.Y);
             this.control.Update(gameTime);
         }
 
@@ -142,6 +150,7 @@ namespace WindowSystem
             HandlePos = new Vector2(Position.X + Size.X - scollbarPos.X + 2, Position.Y);
             ScrollbarHandle.Location = HandlePos.ToPoint();
             Scrollbar = new Rectangle(new Vector2(Position.X + Size.X - scollbarPos.X, Position.Y).ToPoint(), new Vector2(scollbarPos.X, Bounds.Height - control.MarginBR.Y / 2).ToPoint());
+            
             this.control.Resized();
         }
 

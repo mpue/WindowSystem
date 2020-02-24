@@ -40,15 +40,15 @@ The library is not production ready yet! So use it at your own risk and don't fi
 
 Basically you get a WindowManager instance with 
   
-  WindowManager.CreateInstance(graphics, Content, spriteBatch);
+    WindowManager.CreateInstance(graphics, Content, spriteBatch);
   
 Now you can hook up the WindowManager to your Update and Draw calls with
 
-  WindowManager.GetInstance().Update(gameTime)
+    WindowManager.GetInstance().Update(gameTime)
   
 Depending on what you want to do, call
 
-  WindowManager.GetInstance().Draw(gameTime)
+    WindowManager.GetInstance().Draw(gameTime)
   
 before or after your game draw calls.
 

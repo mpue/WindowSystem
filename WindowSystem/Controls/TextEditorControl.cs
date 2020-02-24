@@ -3,13 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using XTron;
 
 namespace WindowSystem
 {
     public class TextEditorControl : Control
     {
         private readonly StringBuilder sb = new StringBuilder();
+
+        private Color borderColor = WindowManager.GetInstance().Theme.TextEditor.borderColor;
+        private Color textColor = WindowManager.GetInstance().Theme.TextEditor.textColor;
+        private Color selectionBorderColor = WindowManager.GetInstance().Theme.TextEditor.selectionBorderColor;
+        private Color backgroundColor = WindowManager.GetInstance().Theme.TextEditor.backgroundColor;
 
         private int row = 0;
         private int col = 0;
@@ -39,10 +43,6 @@ namespace WindowSystem
             } 
         }
 
-        private Color borderColor = Color.DarkGray;
-        private Color textColor = Color.Black;
-        private Color selectionBorderColor = Color.Orange;
-        private Color backgroundColor = Color.White;
         private SpriteFont editorFont;
         private bool cursorVisible = false;
         private String cursor = "_";

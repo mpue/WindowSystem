@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using XTron;
 
 namespace WindowSystem
@@ -16,10 +11,11 @@ namespace WindowSystem
 
         public String Text { get; set; } = "CheckBox";
 
-        private Color borderColor = Color.DarkGray;
-        private Color textColor = Color.Black;
-        private Color selectionBorderColor = Color.Orange;
-        private Color backgroundColor = Color.White;
+        private Color borderColor = WindowManager.GetInstance().Theme.CheckBox.borderColor;
+        private Color textColor = WindowManager.GetInstance().Theme.CheckBox.textColor;
+        private Color selectionBorderColor = WindowManager.GetInstance().Theme.CheckBox.selectionBorderColor;
+        private Color backgroundColor = WindowManager.GetInstance().Theme.CheckBox.backgroundColor;
+
         private SpriteFont labelFont;
 
         public Texture2D Icon { get; set; }
@@ -63,13 +59,16 @@ namespace WindowSystem
         public override void Draw(GameTime gameTime)
         {
             Vector2 fontSize = labelFont.MeasureString(Text);
+            
             spriteBatch.DrawString(labelFont, Text, Position + new Vector2(20,fontSize.Y/2), textColor);
 
-            spriteBatch.DrawRectangle(new Rectangle((int)Position.X, (int)Position.Y + (int)fontSize.Y / 2, 16, 16), Color.Black);
+            spriteBatch.FillRectangle(new Rectangle((int)Position.X, (int)Position.Y + (int)fontSize.Y / 2, 16, 16), backgroundColor);
+            spriteBatch.DrawRectangle(new Rectangle((int)Position.X, (int)Position.Y + (int)fontSize.Y / 2, 16, 16), borderColor);
+            
             if (Checked)
             {
-                Primitives2D.DrawLine(spriteBatch, new Vector2((int)Position.X, (int)Position.Y + (int)fontSize.Y / 2), new Vector2((int)Position.X + 16, (int)Position.Y + 16 + (int)fontSize.Y / 2), Color.Black);
-                Primitives2D.DrawLine(spriteBatch, new Vector2((int)Position.X, (int)Position.Y + 16 + (int)fontSize.Y / 2), new Vector2((int)Position.X + 16, (int)Position.Y + (int)fontSize.Y / 2 ), Color.Black);
+                Primitives2D.DrawLine(spriteBatch, new Vector2((int)Position.X, (int)Position.Y + (int)fontSize.Y / 2), new Vector2((int)Position.X + 16, (int)Position.Y + 16 + (int)fontSize.Y / 2), borderColor);
+                Primitives2D.DrawLine(spriteBatch, new Vector2((int)Position.X, (int)Position.Y + 16 + (int)fontSize.Y / 2), new Vector2((int)Position.X + 16, (int)Position.Y + (int)fontSize.Y / 2 ), borderColor);
 
             }
         }

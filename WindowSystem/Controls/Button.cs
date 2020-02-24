@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using XTron;
 
 namespace WindowSystem
@@ -14,11 +9,14 @@ namespace WindowSystem
     {
         public String Text = "Button";
 
-        private Color borderColor = Color.DarkGray;
-        private Color textColor = Color.Black;
-        private Color selectionBorderColor = Color.Orange;
-        private Color backgroundColor = Color.White;
+        private Color borderColor = WindowManager.GetInstance().Theme.Button.borderColor;
+        private Color textColor = WindowManager.GetInstance().Theme.Button.textColor;
+        private Color selectionBorderColor = WindowManager.GetInstance().Theme.Button.selectionBorderColor;
+        private Color backgroundColor = WindowManager.GetInstance().Theme.Button.backgroundColor;
+
+
         private SpriteFont buttonFont;
+
 
         public Texture2D Icon { get; set; }
 

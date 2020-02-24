@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using System;
 using XTron;
 
 namespace WindowSystem
 {
     public class MenuBar : Control
     {
-        private Color backgroundColor = Color.White;
-        private Color borderColor = Color.DarkGray;
-        private Color textColor = Color.Black;
-
+        private Color backgroundColor = WindowManager.GetInstance().Theme.MenuBar.backgroundColor;            
+        private Color borderColor = WindowManager.GetInstance().Theme.MenuBar.borderColor;
+        private Color textColor = WindowManager.GetInstance().Theme.MenuBar.textColor;
 
         public MenuBar(Vector2 position, Vector2 size) : base()
         {
@@ -43,9 +36,6 @@ namespace WindowSystem
                    
             }
         }
-
-
-        
 
         public Menu[] AddMenus(String[] names)
         {

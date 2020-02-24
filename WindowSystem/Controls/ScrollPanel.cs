@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using XTron;
 
 namespace WindowSystem
 {
     public class ScrollPanel : Control
     {
+        private Color borderColor = WindowManager.GetInstance().Theme.ScrollPanel.borderColor;
+        private Color selectionBorderColor = WindowManager.GetInstance().Theme.ScrollPanel.selectionBorderColor;
+        private Color backgroundColor = WindowManager.GetInstance().Theme.ScrollPanel.backgroundColor;
+
         private Vector2 HandleStartPos;
         private Vector2 HandlePos;
         private Rectangle ScrollbarHandle;
         private Vector2 scrollPosition = new Vector2(0,0);
         private Vector2 scollbarPos = new Vector2(25, 0);
         private Rectangle Scrollbar;
-
-        private Color borderColor = Color.DarkGray;
-        private Color selectionBorderColor = Color.Orange;
-        private Color backgroundColor = Color.White;
 
         private RasterizerState rasterizerState;
         private readonly Control control;

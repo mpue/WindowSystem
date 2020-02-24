@@ -4,12 +4,15 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
+using WindowSystem.Controls;
 
 namespace WindowSystem
 {
     public class WindowManager : Control
     {
         public static WindowManager instance = null;
+
+        public Theme Theme { get; set; } = new DefaultTheme();
 
         public static WindowManager CreateInstance(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
         {

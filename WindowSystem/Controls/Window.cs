@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using XTron;
 
 namespace WindowSystem
@@ -16,14 +11,14 @@ namespace WindowSystem
 
         public String Title { get; set; } = "Window";
 
-        private Vector2 shadowOffset = new Vector2(4, 4);        
-        private Color titleFontColor = Color.Black;
-        private Color shadowColor = new Color(0.1f, 0.1f, 0.1f, 0.5f);
-        private Color borderColor = Color.DarkGray;
-        private Color titleBarColor = Color.White;
-        private Color selectionBorderColor = Color.Orange;
-        private Color windowBackgroundColor = Color.White; //new Color(0.5f, 0.5f, 0.5f, 0.5f);
-        private Color seperatorColor = Color.GhostWhite;
+        private Vector2 shadowOffset = new Vector2(4, 4);
+        private Color titleFontColor = WindowManager.GetInstance().Theme.Window.titleFontColor;
+        private Color shadowColor = WindowManager.GetInstance().Theme.Window.shadowColor;
+        private Color borderColor = WindowManager.GetInstance().Theme.Window.borderColor;
+        private Color titleBarColor = WindowManager.GetInstance().Theme.Window.titleBarColor;
+        private Color selectionBorderColor = WindowManager.GetInstance().Theme.Window.selectionBorderColor;
+        private Color windowBackgroundColor = WindowManager.GetInstance().Theme.Window.windowBackgroundColor;
+        private Color seperatorColor = WindowManager.GetInstance().Theme.Window.seperatorColor;
 
         public int ZOrder { get; set; } = 0;
 

@@ -108,6 +108,12 @@ namespace WindowSystem
             CreateEditor();
 
 
+            AnalogClock clock = new AnalogClock(new Vector2(1700,200),128);
+            clock.Size = new Vector2(256, 256);
+            windowManager.AddChild(clock);
+                
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -154,8 +160,13 @@ namespace WindowSystem
 
         private void HandleAppsButtonClick(object sender, EventArgs e)
         {
-            Window appsWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(1024, 768));
+            Window appsWindow = windowManager.AddWindow(new Vector2(300, 300), new Vector2(800, 400));
             appsWindow.Title = "Applications";
+
+            Panel panel = new Panel(new Vector2(0, 0), new Vector2(1024, 768));
+            ScrollPanel sp = new ScrollPanel(new Vector2(0, 25), new Vector2(800, 400), panel);
+
+            appsWindow.AddChild(sp);
 
             int index = 20;
             int column = 0;
@@ -172,7 +183,7 @@ namespace WindowSystem
                 }
 
                 appsButton.Icon = Content.Load<Texture2D>("Icons/0"+ index +"-"+apps[index-20].ToLower());
-                appsWindow.AddChild(appsButton);
+                panel.AddChild(appsButton);
                 index++;
 
                 if (column < 5) { 

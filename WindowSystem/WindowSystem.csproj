@@ -44,7 +44,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AbstractEntity.cs" />
+    <Compile Include="Controls\DarkTheme.cs" />
     <Compile Include="Controls\DefaultTheme.cs" />
+    <Compile Include="Controls\AnalogClock.cs" />
+    <Compile Include="Controls\Panel.cs" />
     <Compile Include="Controls\Theme.cs" />
     <Compile Include="Controls\Menu.cs" />
     <Compile Include="Controls\MenuBar.cs" />

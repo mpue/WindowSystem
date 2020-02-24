@@ -5,13 +5,13 @@ namespace WindowSystem
 {
     public class Menu : Control
     {
+        private Color textColor = WindowManager.GetInstance().Theme.MenuBar.textColor;
         private Color backgroundColor = Color.White;
         private SpriteFont menuFont;
 
         public bool IsOpen { get; set; }
 
         public string Title { get; set; } = "Menu";
-        private Color textColor = Color.Black;
 
         public Menu(Vector2 position, Vector2 size) : base()
         {

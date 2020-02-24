@@ -12,7 +12,7 @@ namespace WindowSystem
     {
         public static WindowManager instance = null;
 
-        public Theme Theme { get; set; } = new DefaultTheme();
+        public Theme Theme { get; set; } = new DarkTheme();
 
         public static WindowManager CreateInstance(GraphicsDeviceManager graphicsDevice, ContentManager content, SpriteBatch spriteBatch)
         {
@@ -59,7 +59,7 @@ namespace WindowSystem
             this.graphicsDevice = graphicsDevice;
             this.content = content;
             this.spriteBatch = spriteBatch;
-            background = content.Load<Texture2D>("Wallpaper/thirsty");
+            background = content.Load<Texture2D>("Wallpaper/skyscraper");
         }
 
         public MouseState mouseState { get; private set; }
@@ -90,6 +90,19 @@ namespace WindowSystem
         public override void Resized()
         {
             Bounds = new Rectangle(0, 0, graphicsDevice.PreferredBackBufferWidth, graphicsDevice.PreferredBackBufferHeight);
+
+            foreach (Control child in children)
+            {
+                child.Resized();
+
+                if (child is MenuBar)
+                {
+                    MenuBar mb = child as MenuBar;
+                    Vector2 size = mb.Size;
+                    size.X = graphicsDevice.PreferredBackBufferWidth;
+                    mb.Size = size;
+                }
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -433,6 +446,10 @@ namespace WindowSystem
                 w.Update(gameTime);
             }
 
+            foreach(Control c in children)
+            {
+                c.Update(gameTime);
+            }
             // UpdateChildren(mouseDelta);
         }
     }

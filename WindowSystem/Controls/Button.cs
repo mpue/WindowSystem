@@ -14,10 +14,7 @@ namespace WindowSystem
         private Color selectionBorderColor = WindowManager.GetInstance().Theme.Button.selectionBorderColor;
         private Color backgroundColor = WindowManager.GetInstance().Theme.Button.backgroundColor;
 
-
         private SpriteFont buttonFont;
-
-
         public Texture2D Icon { get; set; }
 
         public Button(Vector2 position, Vector2 size) : base()
@@ -38,6 +35,7 @@ namespace WindowSystem
 
         public override void Update(GameTime gameTime)
         {
+            
         }
 
         public override void Resized()
@@ -46,7 +44,9 @@ namespace WindowSystem
 
         public override void Draw(GameTime gameTime)
         {
-            Primitives2D.FillRectangle(spriteBatch, Position, Size, backgroundColor);
+
+            if (Icon == null)
+             Primitives2D.FillRectangle(spriteBatch, Position, Size, backgroundColor);
 
             if (Selected)
             {
@@ -76,7 +76,6 @@ namespace WindowSystem
                 spriteBatch.DrawString(buttonFont, Text, Position + (Size / 2 - fontSize / 2), textColor);
             }
 
-            // Primitives2D.DrawRectangle(spriteBatch, Bounds.Location.ToVector2(), size, Color.Yellow);
         }
 
     }

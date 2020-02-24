@@ -8,7 +8,7 @@ namespace WindowSystem
     {
         private Color backgroundColor = WindowManager.GetInstance().Theme.MenuBar.backgroundColor;            
         private Color borderColor = WindowManager.GetInstance().Theme.MenuBar.borderColor;
-        private Color textColor = WindowManager.GetInstance().Theme.MenuBar.textColor;
+        
 
         public MenuBar(Vector2 position, Vector2 size) : base()
         {
@@ -67,10 +67,12 @@ namespace WindowSystem
 
         public override void Update(GameTime gameTime)
         {
+            Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());
         }
 
         public override void Resized()
         {
+            Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());
         }
 
         public override void Draw(GameTime gameTime)

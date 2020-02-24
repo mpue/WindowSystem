@@ -46,6 +46,8 @@ namespace WindowSystem.Controls
             public virtual Color borderColor { get; } = Color.DarkGray;
             public virtual Color selectionBorderColor { get; } = Color.Orange;
             public virtual Color backgroundColor { get; } = Color.White;
+            public virtual Color scrollHandleColor { get; } = Color.DarkGray;
+            
         }
 
         public class WindowColors

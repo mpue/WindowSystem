@@ -11,6 +11,7 @@ namespace WindowSystem
         private Color borderColor = WindowManager.GetInstance().Theme.ScrollPanel.borderColor;
         private Color selectionBorderColor = WindowManager.GetInstance().Theme.ScrollPanel.selectionBorderColor;
         private Color backgroundColor = WindowManager.GetInstance().Theme.ScrollPanel.backgroundColor;
+        private Color scrollHandleColor = WindowManager.GetInstance().Theme.ScrollPanel.scrollHandleColor;
 
         private Vector2 HandleStartPos;
         private Vector2 HandlePos;
@@ -42,7 +43,7 @@ namespace WindowSystem
             HandleStartPos = HandlePos;
             ScrollbarHandle = new Rectangle(HandleStartPos.ToPoint(), new Vector2(scollbarPos.X - 2, 50).ToPoint());
             Scrollbar  = new Rectangle( new Vector2(Position.X + Size.X - scollbarPos.X, Position.Y).ToPoint(), new Vector2(scollbarPos.X, Bounds.Height - control.MarginBR.Y / 2).ToPoint());
-
+            control.Parent = this;
             controlScale = new Vector2(control.Bounds.Height / Bounds.Height, control.Bounds.Width / Bounds.Width);
 
         }
@@ -176,7 +177,8 @@ namespace WindowSystem
             spriteBatch.GraphicsDevice.RasterizerState = state;
 
             Primitives2D.DrawRectangle(spriteBatch, new Vector2(Position.X + Size.X - scollbarPos.X,Position.Y), new Vector2(scollbarPos.X, Bounds.Height - control.MarginBR.Y /2), borderColor);
-            Primitives2D.FillRectangle(spriteBatch, ScrollbarHandle, borderColor);
+            Primitives2D.FillRectangle(spriteBatch, ScrollbarHandle, scrollHandleColor);
+
 
         }
 

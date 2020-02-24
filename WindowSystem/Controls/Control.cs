@@ -39,6 +39,8 @@ namespace WindowSystem
 
         public bool ShowBorder { get; set; } = true;
 
+        public Control Parent { get; set; }
+
         public virtual void HandleKeyPressed(object sender, EventArgs e)
         {
 
@@ -54,10 +56,11 @@ namespace WindowSystem
                 if (bounds.Width > 0 && bounds.Height > 0)
                 {
                     c.Bounds = bounds;
+                    
                 }
-
                     
             }
+            c.Parent = this;
             children.Add(c);
             Resized();
         }
@@ -88,10 +91,12 @@ namespace WindowSystem
         {
             if (Visible)
             {
-                foreach(Control c in children)
+                foreach (Control c in children)
                 {
                     c.Draw(gameTime);
                 }
+
+                
 
             }
         }

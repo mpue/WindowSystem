@@ -41,7 +41,7 @@ namespace WindowSystem
             control.Bounds = new Rectangle((Position + control.Position + scrollPosition).ToPoint(), control.Bounds.Size);
             offset = Position - control.Position;
             KeyboardManager.GetInstance().KeyPressed += HandleKeyPressed;
-            HandlePos = new Vector2(Position.X + Size.X - scollbarPos.X + 2, Position.Y );
+            HandlePos = new Vector2(Position.X + Size.X - scollbarPos.X + 2, Position.Y) + scrollPosition;
             HandleStartPos = HandlePos;
             ScrollbarHandle = new Rectangle(HandleStartPos.ToPoint(), new Vector2(scollbarPos.X - 2, 50).ToPoint());
             Scrollbar  = new Rectangle( new Vector2(Position.X + Size.X - scollbarPos.X, Position.Y).ToPoint(), new Vector2(scollbarPos.X, Bounds.Height - control.MarginBR.Y / 2).ToPoint());
@@ -51,8 +51,12 @@ namespace WindowSystem
         {
             if (!mouseDown)
             {
-                mouseDown = true;
-                HandleStartPos = HandlePos;
+                if (IsInsideScrollBarRange(e.Position))
+                {
+                    mouseDown = true;
+                    HandleStartPos = scrollPosition;
+                }
+
             }
         }
 
@@ -66,7 +70,7 @@ namespace WindowSystem
 
         private bool IsInsideScrollBarRange(Vector2 mousePosition)
         {
-            return Scrollbar.Contains(mousePosition.ToPoint());
+            return ScrollbarHandle.Contains(mousePosition.ToPoint());
         }
         
 
@@ -88,22 +92,27 @@ namespace WindowSystem
             {
                 SetScrollPosition(scrollPosition + new Vector2(0, 10));
             }
-            ScrollbarHandle = new Rectangle(new Vector2(Position.X + Size.X - scollbarPos.X + 2, Position.Y + scrollPosition.Y).ToPoint(), new Vector2(scollbarPos.X - 2, 50).ToPoint());
+            
         }
 
         public override void OnMouseMove(ControlEventArgs e)
         {
             ButtonState state = e.state.LeftButton;
 
-            if (state == ButtonState.Pressed && IsInsideScrollBarRange(e.Position))
+            if (mouseDown)
             {
                 Vector2 delta = e.Delta ;
                 delta.X = 0;
-                HandlePos = HandleStartPos + delta;
-                scrollPosition.Y =  delta.Y;
+                scrollPosition = HandleStartPos + delta;
+                if (scrollPosition.Y < 0)
+                {
+                    scrollPosition.Y = 0;
+                }                     
 
-                ScrollbarHandle.Location = HandlePos.ToPoint(); 
-                     
+                if (scrollPosition.Y + ScrollbarHandle.Height > Bounds.Height)
+                {
+                    scrollPosition.Y = Bounds.Height - ScrollbarHandle.Height;
+                }
             }
 
         }
@@ -121,8 +130,8 @@ namespace WindowSystem
 
         public override void Update(GameTime gameTime)
         {
-            Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());            
-            ScrollbarHandle.Location = HandlePos.ToPoint();
+            Bounds = new Rectangle(Position.ToPoint(), Size.ToPoint());
+            ScrollbarHandle = new Rectangle(new Vector2(Position.X + Size.X - scollbarPos.X + 2, Position.Y + scrollPosition.Y).ToPoint(), new Vector2(scollbarPos.X - 2, 50).ToPoint());
             this.control.Bounds = new Rectangle(Position.ToPoint() + control.Position.ToPoint() - scrollPosition.ToPoint(), control.Size.ToPoint());
             this.control.Position = Position + offset - scrollPosition;
             this.control.Update(gameTime);

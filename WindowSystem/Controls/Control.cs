@@ -99,7 +99,7 @@ namespace WindowSystem
             }
         }
 
-        public void StartUpdate(Vector2 pos)
+        public virtual void StartUpdate(Vector2 pos)
         {
             this.StartPosition = Position;
             this.Startbounds = Bounds;
